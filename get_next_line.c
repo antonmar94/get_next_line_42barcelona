@@ -6,7 +6,7 @@
 /*   By: antonio- <antonio-@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 19:55:30 by antonio-          #+#    #+#             */
-/*   Updated: 2024/08/03 18:05:00 by antonio-         ###   ########.fr       */
+/*   Updated: 2024/08/04 14:28:57 by antonio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static int	newline_pos(char *file)
 	i = 0;
 	while (file[i] != '\n' && file[i] != '\0')
 		i++;
-	printf("Posicion de la nueva linea %i\n", i);
 	return (i);
 }
 
@@ -42,8 +41,8 @@ static void	file_filler(char **file, char *buffer)
 	else
 	{
 		temp = *file;
-		*file = ft_strjoin(*file, buffer);
-		free_file(&temp);
+		*file = ft_strjoin(temp, buffer);
+		free(temp);
 	}
 }
 
@@ -52,11 +51,10 @@ static void	line_filler(char **line, char **file)
 	char		*temp;
 
 	temp = *file;
-	printf("FILE ES %s\n", temp);
-
-	printf("LINE ANTES ES %s\n", *line);
-	*line = ft_substr(temp, 0, newline_pos(temp));
-	printf("LINE DESPUES ES %s\n", *line);
+	if (*temp)
+		*line = ft_substr(temp, 0, newline_pos(temp) + 1);
+	else
+		line = NULL;
 	*file = ft_substr(temp, newline_pos(*file) + 1, ft_strlen(*file));
 	free(temp);
 }
@@ -71,8 +69,10 @@ char	*get_next_line(int fd)
 	if (BUFFER_SIZE <= 0 || fd < 0)
 		return (NULL);
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
 	buffer_tam = 1;
-	while (!(ft_strchr(file[fd], '\n')) && buffer_tam != 0)
+	while (!file[fd] || (!(ft_strchr(file[fd], '\n')) && buffer_tam != 0))
 	{
 		buffer_tam = read(fd, buffer, BUFFER_SIZE);
 		if (buffer_tam == -1)
@@ -90,12 +90,19 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int	main(int argc, char **argv)
+/*int	main(int argc, char **argv)
 {
 	(void)argc;
 	int fd = open(argv[1], 2);
+	char *line;
 
+	line = get_next_line(fd);
+	while (line) {
+		printf("%s", line);
+		free(line);	
+		line = get_next_line(fd);
+	}
+	free(line);
 	printf("Linea actual %s\n", get_next_line(fd));
-	/*printf("Linea actual %s\n", get_next_line(fd));
-	printf("Linea actual %s\n", get_next_line(fd));*/
-}
+	printf("Linea actual %s\n", get_next_line(fd));
+}*/
