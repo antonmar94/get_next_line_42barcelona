@@ -6,11 +6,34 @@
 /*   By: antonio- <antonio-@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 20:20:34 by antonio-          #+#    #+#             */
-/*   Updated: 2024/08/04 13:46:10 by antonio-         ###   ########.fr       */
+/*   Updated: 2024/08/07 20:06:36 by antonio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	ft_bzero(void *s, size_t n)
+{
+	size_t		i;
+
+	i = 0;
+	while (i < n)
+	{
+		((char *)s)[i] = 0;
+		i++;
+	}
+}
+
+void *ft_calloc(size_t nmemb, size_t size)
+{
+	void	*buffer;
+
+	buffer = malloc(nmemb * size);
+	if (buffer == NULL)
+		return (buffer);
+	ft_bzero(buffer, size * nmemb);
+	return (buffer);
+}
 
 size_t	ft_strlen(const char *str)
 {
@@ -92,7 +115,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		s_len = ft_strlen(s) - start;
 	if (s_len < len)
 		len = s_len;
-	res = malloc(sizeof(char) * (len + 1));
+	res = ft_calloc(sizeof(char), (len + 1));
 	if (!res)
 		return (res);
 	if (start >= ft_strlen((char *) s))
