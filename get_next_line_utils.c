@@ -6,32 +6,28 @@
 /*   By: antonio- <antonio-@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 20:20:34 by antonio-          #+#    #+#             */
-/*   Updated: 2024/08/07 20:06:36 by antonio-         ###   ########.fr       */
+/*   Updated: 2024/08/29 17:27:16 by antonio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	ft_bzero(void *s, size_t n)
-{
-	size_t		i;
-
-	i = 0;
-	while (i < n)
-	{
-		((char *)s)[i] = 0;
-		i++;
-	}
-}
-
-void *ft_calloc(size_t nmemb, size_t size)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
 	void	*buffer;
+	size_t	i;
+	size_t	malloc_size;
 
-	buffer = malloc(nmemb * size);
+	i = 0;
+	malloc_size = nmemb * size;
+	buffer = malloc(malloc_size);
 	if (buffer == NULL)
 		return (buffer);
-	ft_bzero(buffer, size * nmemb);
+	while (i < malloc_size)
+	{
+		((char *)buffer)[i] = 0;
+		i++;
+	}
 	return (buffer);
 }
 
@@ -87,19 +83,6 @@ char	*ft_strdup(const char *s1)
 	}
 	copy[i] = '\0';
 	return (copy);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	while (*s != '\0')
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		s++;
-	}
-	if ((char)c == '\0')
-		return ((char *)s);
-	return (NULL);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
