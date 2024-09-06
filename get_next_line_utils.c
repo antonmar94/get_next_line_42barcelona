@@ -6,7 +6,7 @@
 /*   By: antonio- <antonio-@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 20:20:34 by antonio-          #+#    #+#             */
-/*   Updated: 2024/08/29 17:27:16 by antonio-         ###   ########.fr       */
+/*   Updated: 2024/09/06 21:20:38 by antonio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	i = 0;
 	malloc_size = nmemb * size;
 	buffer = malloc(malloc_size);
-	if (buffer == NULL)
+	if (!buffer)
 		return (buffer);
 	while (i < malloc_size)
 	{
@@ -45,22 +45,22 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;
 	size_t	j;
-	size_t	k;
+	size_t	s1_len;
+	size_t	sum_len;
 	char	*scopy;
 
 	i = 0;
 	j = 0;
-	k = 0;
-	if (!s1 || !s2)
-		return (NULL);
-	scopy = (void *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	s1_len = ft_strlen(s1);
+	sum_len = s1_len + ft_strlen(s2);
+	scopy = ft_calloc(sizeof(char), (sum_len + 1));
 	if (!scopy)
 		return (NULL);
-	while (i < ft_strlen(s1))
+	while (i < s1_len)
 		scopy[i++] = s1[j++];
-	while (i < (ft_strlen(s1) + ft_strlen(s2)))
-		scopy[i++] = s2[k++];
-	scopy[i] = '\0';
+	j = 0;
+	while (i < sum_len)
+		scopy[i++] = s2[j++];
 	return (scopy);
 }
 
@@ -72,8 +72,8 @@ char	*ft_strdup(const char *s1)
 	i = 0;
 	while (s1[i] != '\0')
 		i++;
-	copy = malloc(sizeof(char) * (i + 1));
-	if (copy == NULL)
+	copy = ft_calloc(sizeof(char), (i + 1));
+	if (!copy)
 		return (NULL);
 	i = 0;
 	while (s1[i] != '\0')
@@ -81,7 +81,6 @@ char	*ft_strdup(const char *s1)
 		copy[i] = s1[i];
 		i++;
 	}
-	copy[i] = '\0';
 	return (copy);
 }
 
@@ -109,6 +108,5 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		res[i] = s[i];
 		i++;
 	}
-	res[len] = '\0';
 	return (res);
 }

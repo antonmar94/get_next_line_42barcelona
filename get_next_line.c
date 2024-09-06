@@ -6,7 +6,7 @@
 /*   By: antonio- <antonio-@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 19:55:30 by antonio-          #+#    #+#             */
-/*   Updated: 2024/09/01 19:14:28 by antonio-         ###   ########.fr       */
+/*   Updated: 2024/09/06 21:17:43 by antonio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ static int	file_filler(int fd, char **file, char *buffer)
 	buffer_tam = read(fd, buffer, BUFFER_SIZE);
 	if (buffer_tam == -1)
 	{
+		free(*file);
+		*file = NULL;
 		free(buffer);
 		return (buffer_tam);
 	}
@@ -61,19 +63,18 @@ static int	file_filler(int fd, char **file, char *buffer)
 static void	line_filler(char **line, char **file)
 {
 	char		*temp;
+	int			newlinepos;
 
 	temp = *file;
-	if (temp)
-	{
-		*line = ft_substr(temp, 0, newline_pos(temp) + 1);
-		if (*temp)
-			*file = ft_substr(temp, newline_pos(*file) + 1, ft_strlen(*file));
-		else
-			*file = NULL;
-	}
-	else
-		line = NULL;
+	newlinepos = newline_pos(temp);
+	*line = ft_substr(temp, 0, newlinepos + 1);
+	*file = ft_substr(temp, newline_pos(*file) + 1, ft_strlen(*file));
 	free(temp);
+	if (*file && !**file)
+	{
+		free(*file);
+		*file = NULL;
+	}
 }
 
 char	*get_next_line(int fd)
@@ -97,7 +98,7 @@ char	*get_next_line(int fd)
 	}
 	free(buffer);
 	line_filler(&line, &file[fd]);
-	if (buffer_tam == 0 && !*line)
+	if (buffer_tam == 0 && (!line || !*line))
 	{
 		free(line);
 		line = NULL;
@@ -112,11 +113,31 @@ char	*get_next_line(int fd)
 	char *line;
 
 	line = get_next_line(fd);
+	printf("%s", line);
+	free(line);
+	close(fd);
+	line = get_next_line(fd);
+	printf("%s", line);
+	free(line);
+	fd = open(argv[1], 2);
+	line = get_next_line(fd);
+	printf("%s", line);
+	free(line);
+	line = get_next_line(fd);
+	printf("%s", line);
+	free(line);
+	close(fd);
+	line = get_next_line(fd);
+	printf("%s", line);
+	free(line);
+	fd = open(argv[1], 2);
+	line = get_next_line(fd);
+	printf("%s", line);
+	free(line);
 	while (line) {
 		printf("%s", line);
 		free(line);	
 		line = get_next_line(fd);
 	}
-	free(line);
 	close(fd);
 }*/
