@@ -6,7 +6,7 @@
 /*   By: antonio- <antonio-@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 19:55:30 by antonio-          #+#    #+#             */
-/*   Updated: 2024/09/06 21:22:15 by antonio-         ###   ########.fr       */
+/*   Updated: 2024/09/07 12:55:11 by antonio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ static void	line_filler(char **line, char **file)
 
 char	*get_next_line(int fd)
 {
-	static char	*file[4096];
+	static char	*file[FOPEN_MAX];
 	char		*buffer;
 	char		*line;
 	int			buffer_tam;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	if (BUFFER_SIZE <= 0 || fd < 0 || fd > FOPEN_MAX)
 		return (NULL);
 	buffer = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 	if (!buffer)
@@ -109,35 +109,37 @@ char	*get_next_line(int fd)
 /*int	main(int argc, char **argv)
 {
 	(void)argc;
-	int fd = open(argv[1], 2);
+	int fd1;
+	int fd2;
+	int fd3;
 	char *line;
 
-	line = get_next_line(fd);
+	fd1 = open(argv[1], 2);
+	fd2 = open(argv[2], 2);
+	fd3 = open(argv[3], 2);
+
+	line = get_next_line(fd3);
 	printf("%s", line);
 	free(line);
-	close(fd);
-	line = get_next_line(fd);
+	line = get_next_line(fd1);
 	printf("%s", line);
 	free(line);
-	fd = open(argv[1], 2);
-	line = get_next_line(fd);
+	line = get_next_line(fd1);
 	printf("%s", line);
 	free(line);
-	line = get_next_line(fd);
+	line = get_next_line(fd2);
 	printf("%s", line);
 	free(line);
-	close(fd);
-	line = get_next_line(fd);
+	line = get_next_line(fd3);
 	printf("%s", line);
 	free(line);
-	fd = open(argv[1], 2);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
+	line = get_next_line(fd2);
 	while (line) {
 		printf("%s", line);
 		free(line);	
-		line = get_next_line(fd);
+		line = get_next_line(fd2);
 	}
-	close(fd);
+	close(fd1);
+	close(fd2);
+	close(fd3);
 }*/

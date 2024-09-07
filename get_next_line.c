@@ -6,7 +6,7 @@
 /*   By: antonio- <antonio-@student.42barcelona.co  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 19:55:30 by antonio-          #+#    #+#             */
-/*   Updated: 2024/09/06 21:17:43 by antonio-         ###   ########.fr       */
+/*   Updated: 2024/09/07 12:52:09 by antonio-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static void	line_filler(char **line, char **file)
 
 char	*get_next_line(int fd)
 {
-	static char	*file[4096];
+	static char	*file;
 	char		*buffer;
 	char		*line;
 	int			buffer_tam;
@@ -90,14 +90,14 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	buffer_tam = 1;
-	while (!file[fd] || (!(ft_strchr(file[fd], '\n')) && buffer_tam != 0))
+	while (!file || (!(ft_strchr(file, '\n')) && buffer_tam != 0))
 	{
-		buffer_tam = file_filler(fd, &file[fd], buffer);
+		buffer_tam = file_filler(fd, &file, buffer);
 		if (buffer_tam == -1)
 			return (NULL);
 	}
 	free(buffer);
-	line_filler(&line, &file[fd]);
+	line_filler(&line, &file);
 	if (buffer_tam == 0 && (!line || !*line))
 	{
 		free(line);
@@ -109,31 +109,11 @@ char	*get_next_line(int fd)
 /*int	main(int argc, char **argv)
 {
 	(void)argc;
-	int fd = open(argv[1], 2);
+	int fd;
 	char *line;
 
+	fd =  open(argv[1], 2);
 	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	close(fd);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	fd = open(argv[1], 2);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	close(fd);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
-	fd = open(argv[1], 2);
-	line = get_next_line(fd);
-	printf("%s", line);
-	free(line);
 	while (line) {
 		printf("%s", line);
 		free(line);	
